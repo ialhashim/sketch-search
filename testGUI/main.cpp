@@ -1,3 +1,8 @@
+#include "Globals.h"
+BofSearchManager * searchManager = NULL;
+QVector<QImage> imageFiles;
+QVector<QString> imagePaths;
+
 #include "mainwindow.h"
 #include <QApplication>
 

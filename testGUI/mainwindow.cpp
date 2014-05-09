@@ -1,6 +1,9 @@
+#include "Globals.h"
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "PaintWidget.h"
+#include "RemoveDup.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -14,4 +17,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::removedupTool()
+{
+    RemoveDup * rw = new RemoveDup();
+    rw->show();
+    rw->raise();
 }

@@ -1,14 +1,8 @@
+#include "Globals.h"
+
 #include "PaintWidget.h"
 #include "ui_PaintWidget.h"
 #include "ui_mainwindow.h"
-#include <QPainter>
-#include <QMouseEvent>
-#include <QFileDialog>
-#include <QLabel>
-
-#include "../bowlib/BofSearchManager.h"
-BofSearchManager * searchManager = NULL;
-QVector<QImage> imageFiles;
 
 PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent), ui(new Ui::PaintWidget)
 {
@@ -25,7 +19,14 @@ PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent), ui(new Ui::PaintWid
 
     QDir d(folderPath);
     QStringList files = d.entryList( QStringList() << "*.png" );
-    for(auto file : files) imageFiles.push_back( QImage(d.absolutePath() + "/" + file) );
+    for(auto file : files)
+    {
+        QString fullpath = d.absolutePath() + "/" + file;
+        QImage img(fullpath);
+        imageFiles.push_back( img );
+
+        imagePaths << fullpath;
+    }
 }
 
 PaintWidget::~PaintWidget()
@@ -88,15 +89,6 @@ void PaintWidget::mouseReleaseEvent(QMouseEvent *event)
     scribbling = false;
 }
 
-cv::Mat QImage2Mat(QImage const& src)
-{
-     cv::Mat tmp(src.height(),src.width(),CV_8UC3,(uchar*)src.bits(),src.bytesPerLine());
-     cv::Mat result; // deep copy just in case (my lack of knowledge with open cv)
-     cvtColor(tmp, result, CV_RGB2GRAY);
-
-     return result;
-}
-
 void PaintWidget::run()
 {
     if(!searchManager) return;
@@ -116,7 +108,7 @@ void PaintWidget::run()
 	for(auto dist_idx : results){
 		QLabel * w = new QLabel( QString("%2 : %1").arg(dist_idx.first).arg(dist_idx.second)  );
 
-        QImage img = imageFiles[dist_idx.second];
+        QImage img = imageFiles[(int)dist_idx.second];
         {
             QPainter painter(&img);
             painter.drawText(10,10, QString("Score : %1").arg(dist_idx.first));

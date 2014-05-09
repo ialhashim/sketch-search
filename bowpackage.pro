@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS += bowlib testGUI
+SUBDIRS += testGUI bowlib
 
 testGUI.depends = bowlib

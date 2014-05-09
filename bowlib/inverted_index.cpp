@@ -318,14 +318,13 @@ void InvertedIndex::save(const std::string &filename) const
     out << float(_avgDocLen);
     out << float(_avgUniqueDocLen);
 
-	/*
     writeArray1Df(out, _Ft);
     writeSetUint(out, _uniqueWords);
     writeArray1Duint(out, _ft);
     writeFreqList(out, _docFrequencyList);
     writeArray2Df(out, _docWeightList);
     writeArray1Df(out, _documentSizes);
-    writeArray1Duint(out, _documentUniqueSizes);*/
+    writeArray1Duint(out, _documentUniqueSizes);
 }
 
 

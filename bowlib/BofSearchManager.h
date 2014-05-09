@@ -20,6 +20,8 @@ public:
      */
     void query(const Array1Df& histvw, size_t num_results, std::vector<dist_idx_t>& results) const;
 
+    void buildSimiliartyMatrix();
+
 private:
 	imdb::galif_generator gen;
 	std::shared_ptr<imdb::tf_function>  _tf;
@@ -27,4 +29,6 @@ private:
 
 	Array2Df vocab;
 	imdb::InvertedIndex index;
+
+    QString folderPath;
 };

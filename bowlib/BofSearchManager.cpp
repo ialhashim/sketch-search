@@ -4,11 +4,19 @@
 #include "kmeans.h"
 #include "histvw.h"
 
-BofSearchManager::BofSearchManager(QString folderPath)
+#include <fstream>
+#include <QDir>
+#include <QElapsedTimer>
+
+BofSearchManager::BofSearchManager(QString folderPath) : folderPath(folderPath)
 {
+    std::cout << "Building / loading vocabulary..\n";
+
     // Read vocabulary from desk
-	imdb::vocabulary voc(folderPath, 2500);
+    imdb::vocabulary voc(folderPath, 3000);
 	vocab = voc.centers;
+
+    std::cout << "Building / loading index..\n";
 
     // Indexing
     std::string tf = "video_google", idf = "video_google";
@@ -53,4 +61,56 @@ std::vector<dist_idx_t> BofSearchManager::search(QString imageFilename)
 void BofSearchManager::query(const Array1Df &histvw, size_t num_results, std::vector<dist_idx_t> &results) const
 {
     index.query(histvw, *_tf, *_idf, (imdb::uint)num_results, results);
+}
+
+void BofSearchManager::buildSimiliartyMatrix()
+{
+    std::cout << "Now we will build similiarty matrix..\n";
+
+    QDir d(folderPath);
+    QString absPath = d.absolutePath() + "/";
+    QStringList files = d.entryList( QStringList() << "*.png" );
+
+    size_t N = files.size();
+
+    std::vector< std::vector<double> > M(N, std::vector<double>(N, 0));
+
+    // Build matrix
+    {
+        qDebug() << "Building matrix..";
+        QElapsedTimer timer; timer.start();
+
+        // Fill up matrix
+        #pragma omp parallel for
+        for(int i = 0; i < N; i++)
+        {
+            cv::Mat curImg = cv::imread((absPath + files.at(i)).toStdString(), CV_LOAD_IMAGE_GRAYSCALE);
+
+            std::vector<dist_idx_t> row = search(curImg);
+
+            for(int j = 0; j < (int)row.size(); j++)
+            {
+                double similiarty = row[j].first;
+                if(i == j) similiarty = 1;
+
+                M[i][j] = M[j][i] = similiarty;
+            }
+        }
+
+        qDebug() << "Matrix took " << timer.elapsed() << " ms\n";
+    }
+
+    // Save to file
+    {
+        std::ofstream out;
+        out.open( qPrintable( d.absolutePath() + "/" + QString("%1_affinity.csv").arg( "affinity" ) ) );
+
+        for(int i = 0; i < N; i++){
+            QStringList vector;
+            for(int j = 0; j < N; j++)
+                vector << QString::number( M[i][j] );
+            out << vector.join(",").toStdString() << "\n";
+        }
+        out.close();
+    }
 }

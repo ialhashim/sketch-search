@@ -77,6 +77,11 @@ void PaintWidget::mouseReleaseEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton)
     {
+        if( event->modifiers().testFlag(Qt::ControlModifier) )
+        {
+            QString replacmentImage = QFileDialog::getOpenFileName(0,"Open Image", "", "Image Files (*.png *.jpg *.bmp)");
+            sketch = QImage(replacmentImage);
+        }
         run();
     }
 
@@ -111,7 +116,13 @@ void PaintWidget::run()
 	for(auto dist_idx : results){
 		QLabel * w = new QLabel( QString("%2 : %1").arg(dist_idx.first).arg(dist_idx.second)  );
 
-		w->setPixmap(QPixmap::fromImage(imageFiles[dist_idx.second]));
+        QImage img = imageFiles[dist_idx.second];
+        {
+            QPainter painter(&img);
+            painter.drawText(10,10, QString("Score : %1").arg(dist_idx.first));
+        }
+
+        w->setPixmap(QPixmap::fromImage(img));
 
 		window->resultslayout->addWidget(w);
 	}

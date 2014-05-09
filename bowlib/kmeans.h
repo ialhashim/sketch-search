@@ -133,7 +133,7 @@ class kmeans
      * @param initalgorithm Algorithm used to estimate the inital cluster centers
      * @param distfn Distance function used for comparing two samples.
      */
-    kmeans(const collection_t& collection, std::size_t numclusters, KmeansInitAlgorithm initalgorithm = KmeansInitPlusPlus, const dist_fn& distfn = dist_fn())
+    kmeans(const collection_t& collection, std::size_t numclusters, KmeansInitAlgorithm initalgorithm = KmeansInitRandom, const dist_fn& distfn = dist_fn())
      : _collection(collection), _distfn(distfn), _centers(numclusters), _clusters(collection.size())
     {
         // get initial centers

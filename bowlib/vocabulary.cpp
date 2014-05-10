@@ -20,12 +20,15 @@ vocabulary::vocabulary(QString folderPath, int numclusters)
 	QString pos_file = QString("%1/positions.bin").arg(d.absolutePath());
     QString index_file = QString("%1/index.bin").arg(d.absolutePath());
 
-	// Load from disk if existing
-	if( QFileInfo(voc_file).exists() && QFileInfo(desc_file).exists() && QFileInfo(pos_file).exists() )
-	{
-		load( voc_file.toStdString() );
-
+    if( QFileInfo(voc_file).exists() )
+    {
+        load( voc_file.toStdString() );
         if(QFileInfo(index_file).exists()) return; // everything is ready
+    }
+
+	// Load from disk if existing
+    if( QFileInfo(desc_file).exists() && QFileInfo(pos_file).exists() )
+	{
 
 		QFile dfile( desc_file ); dfile.open(QIODevice::ReadOnly); QDataStream din(&dfile);
 		QFile pfile( pos_file  ); pfile.open(QIODevice::ReadOnly); QDataStream pin(&pfile);

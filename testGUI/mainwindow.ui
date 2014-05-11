@@ -37,6 +37,8 @@
      <string>Tools</string>
     </property>
     <addaction name="actionRemove_Duplicates"/>
+    <addaction name="separator"/>
+    <addaction name="actionFrom_3D_OBJ"/>
    </widget>
    <addaction name="menuTools"/>
   </widget>
@@ -52,6 +54,11 @@
   <action name="actionRemove_Duplicates">
    <property name="text">
     <string>Remove Duplicates..</string>
+   </property>
+  </action>
+  <action name="actionFrom_3D_OBJ">
+   <property name="text">
+    <string>From 3D OBJ..</string>
    </property>
   </action>
  </widget>
@@ -74,8 +81,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFrom_3D_OBJ</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>from3DShape()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>removedupTool()</slot>
+  <slot>from3DShape()</slot>
  </slots>
 </ui>

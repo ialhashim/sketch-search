@@ -103,15 +103,18 @@ void PaintWidget::run()
 	}
 
 	// Only top 3
-	results.resize(3);
+    results.resize(5);
 
 	for(auto dist_idx : results){
 		QLabel * w = new QLabel( QString("%2 : %1").arg(dist_idx.first).arg(dist_idx.second)  );
 
         QImage img = imageFiles[(int)dist_idx.second];
         {
+            img = img.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
             QPainter painter(&img);
             painter.drawText(10,10, QString("Score : %1").arg(dist_idx.first));
+            painter.fillRect( QRect(0,img.height()-5,img.width(), 5), qtJetColor(dist_idx.first, 0.2, 0.4));
         }
 
         w->setPixmap(QPixmap::fromImage(img));

@@ -20,6 +20,7 @@ private:
 
 public slots:
     void removedupTool();
+    void from3DShape();
 };
 
 #endif // MAINWINDOW_H

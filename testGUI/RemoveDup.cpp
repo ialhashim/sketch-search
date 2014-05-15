@@ -38,7 +38,8 @@ void RemoveDup::load()
         progress.setValue(i);
         if (progress.wasCanceled())  break;
 
-        std::vector<dist_idx_t> results = searchManager->search( QImage2Mat(imageFiles[i]) );
+        cv::Mat mat = QImageToCvMat( imageFiles[i] );
+        std::vector<dist_idx_t> results = searchManager->search( mat );
 
         double bestScore = results.at(0).first;
         results.erase(results.begin()); // remove first

@@ -17,13 +17,6 @@ extern BofSearchManager * searchManager;
 extern QVector<QImage> imageFiles;
 extern QVector<QString> imagePaths;
 
-inline cv::Mat QImage2Mat(QImage const& src){
-     cv::Mat tmp(src.height(),src.width(),CV_8UC3,(uchar*)src.bits(),src.bytesPerLine());
-     cv::Mat result;
-     cvtColor(tmp, result, CV_RGB2GRAY);
-     return result;
-}
-
 static inline QColor qtJetColor(double v, double vmin = 0,double vmax = 1)
 {
    double dv;

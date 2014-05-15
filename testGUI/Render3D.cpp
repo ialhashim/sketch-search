@@ -16,7 +16,8 @@ Render3D::Render3D(QWidget *parent) : QWidget(parent), ui(new Ui::Render3D)
         if(renderImg.width() != 128) renderImg = renderImg.scaledToWidth(128);
         QImage input = renderImg;
 
-        std::vector<dist_idx_t> results = searchManager->search( QImage2Mat( input ) );
+        cv::Mat mat = QImageToCvMat( input );
+        std::vector<dist_idx_t> results = searchManager->search( mat );
 
         QLayoutItem * child;
         while((child = ui->resultslayout->takeAt(0)) != 0){

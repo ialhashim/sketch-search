@@ -93,7 +93,8 @@ void PaintWidget::run()
 {
     if(!searchManager) return;
 
-    std::vector<dist_idx_t> results = searchManager->search( QImage2Mat(sketch.scaledToWidth(128)) );
+    cv::Mat mat = QImageToCvMat( sketch.scaledToWidth(128) );
+    std::vector<dist_idx_t> results = searchManager->search( mat );
 
 	QLayoutItem * child;
 

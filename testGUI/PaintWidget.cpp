@@ -50,9 +50,19 @@ void PaintWidget::mouseMoveEvent(QMouseEvent *event)
         int y = event->pos().y();
         int x = event->pos().x();
 
-        QPainter painter(&sketch);
-        painter.setPen(QPen(Qt::black, 2));
-        painter.drawLine(QPoint(prev_x,prev_y), QPoint(x,y));
+        if(event->modifiers().testFlag(Qt::ShiftModifier))
+        {
+            QPainter painter(&sketch);
+            painter.setPen(QPen(Qt::white, 12));
+            painter.drawLine(QPoint(prev_x,prev_y), QPoint(x,y));
+        }
+        else
+        {
+
+            QPainter painter(&sketch);
+            painter.setPen(QPen(Qt::black, 2));
+            painter.drawLine(QPoint(prev_x,prev_y), QPoint(x,y));
+        }
     }
 
     lastPoint = event->pos();
